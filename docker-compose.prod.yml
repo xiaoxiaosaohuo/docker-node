@@ -5,6 +5,6 @@ services:
         context: .
         args:
             NODE_ENV: production
-        environment:
-          - NODE_ENV=production
-        command: node index.js
+      environment:
+        - NODE_ENV=production
+      command: node index.js
