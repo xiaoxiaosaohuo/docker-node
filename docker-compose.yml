@@ -1,19 +1,33 @@
 version: "3"
 services: 
+    nginx:
+        image: nginx:stable
+        ports:
+            - "3000:80"
+        restart: always
+        volumes: 
+            - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+            - ./public:/usr/share/nginx/html
     node-app:
         build: .
-        ports: 
-            - "3000:3000"
+        # ports: 
+        #     - "3000:3000"
         environment: 
             - PORT=3000
         depends_on: 
             - mongo
     mongo:
         image: mongo
+        restart: always
+        ports: 
+            - 27017:27017
         environment: 
             - MONGO_INITDB_ROOT_USERNAME=jinxin
             - MONGO_INITDB_ROOT_PASSWORD=mypassword
         volumes: 
             - mongo-db:/data/db
+    redis:
+        image: redis
 volumes: 
     mongo-db:
+    redis:

@@ -6,6 +6,7 @@ exports.signup = async (req,res,next) =>{
         const hashpassword = await bcrypt.hash(password,12)
         console.log("sign up",req.body)
         const user = await User.create({username,password:hashpassword});
+        req.session.user = user;
         res.status(201).json({
             status:'success',
             data:{
@@ -33,8 +34,10 @@ exports.login = async (req,res,next)=>{
             })
         }
         const isCorrect = await bcrypt.compare(password,user.password);
-        console.log("login,isCorrect",isCorrect)
+        console.log("login,isCorrect",isCorrect,req.session)
         if (isCorrect) {
+            // 将用户信息保存到session中，之后会存储到redis
+            req.session.user = user;
             res.status(200).json({
                 status:'success'
             })
